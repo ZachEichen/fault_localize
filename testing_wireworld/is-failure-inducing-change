@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# copy over wireworld.c 
+cp wireworld-original.c wireworld.copy.c
+# patch everything 
+for patchnum in "$@"
+do
+    echo "\'patch.$patchnum\'"
+    echo "cat patch.$patchnum | patch -p0 wireworld-original.c"
+    eval "cat patch.$patchnum | patch -p0 wireworld-original.c"
+done
+# check if stuff compiles 
+eval ``
+# cleanup 
+ret=$?
+echo "result was: $ret"
+if gcc -c wireworld-original.c; then
+    mv wireworld.copy.c wireworld-original.c
+    exit 0
+else
+    mv wireworld.copy.c wireworld-original.c
+    exit 1
+fi
+ 
