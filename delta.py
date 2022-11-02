@@ -38,8 +38,8 @@ def delta(target:set, extras:set,command:str):
 
 	# if  neither is interesting alone, we have interference 
 	else: 
-		d1 = delta(p1,p2,command)
-		d2 = delta(p2,p1,command)
+		d1 = delta(p1,p2 | extras ,command)
+		d2 = delta(p2,p1 | extras ,command)
 		return d1 | d2
 
 
@@ -53,6 +53,7 @@ def main():
 	base_set,command = handle_io()
 	out_set = delta(base_set,set(),command)
 	out_list = list(out_set)
+	out_list.sort()
 	print(out_list)
 
 
