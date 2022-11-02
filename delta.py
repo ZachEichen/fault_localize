@@ -3,6 +3,9 @@ from typing import Tuple, List
 from subprocess import run
 import sys
 
+total_calls = 0 
+
+
 def gen_arg_str(in_set:set) -> List[str]: 
 	# assumes that whatever type in in_set has built in to_str method
 	return  [str(val) for val in in_set]
@@ -10,6 +13,7 @@ def gen_arg_str(in_set:set) -> List[str]:
 def is_interesting(desired_set:set,command:str)->bool :
 	call = command.split(' ') + gen_arg_str(desired_set)
 	result = run(call).returncode
+	globals()['total_calls']= globals()['total_calls'] +1  
 	return int(result) ==1 
 
 def partition(in_set:set)-> Tuple[set,set]:
@@ -22,7 +26,7 @@ def delta(target:set, extras:set,command:str):
 	# assumptions: the target + extras subset is interesting 
 	# 			    target is non-empty 
 	# base case, target is len 1 
-	if len(target) == 1: 
+	if len(target) <= 1: 
 		return target 
 
 	# otherwise, partition to recurse
@@ -53,8 +57,14 @@ def main():
 	base_set,command = handle_io()
 	out_set = delta(base_set,set(),command)
 	out_list = list(out_set)
+	print("total calls is {}".format(globals()['total_calls']))
+	print("total_corrs is {}".format(globals()['total_corrs']))
+
 	print(out_list)
 
 
 if __name__ == "__main__": 
+	globals()['total_calls'] = 0 
+	globals()['total_corrs'] = 0
+
 	main()
