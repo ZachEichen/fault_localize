@@ -66,7 +66,7 @@ def calculate_suspicious():
             suspicious.append((itr, suspicious_val))
         #only in passed
         else:
-            suspicious.append((itr,0))
+            suspicious.append((itr,0.0))
 
     #only in failed
     for itr in failed_dict.keys():
