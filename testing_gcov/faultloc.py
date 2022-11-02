@@ -57,7 +57,6 @@ def sort_tuple(tup_list):
 
 def calculate_suspicious():
     suspicious = []
-    relevant_lines = []
     total_failed = len(failed)
     #check case where a line number is both in passed and failed, only in passed, or only in failed
     for itr in passed_dict.keys():
