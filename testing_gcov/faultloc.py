@@ -16,7 +16,7 @@ def handle_io():
     for i in range(n):
         print(sys.argv[i])
         #for some reason this doesnt work as an f string
-        if(sys.argv[i] == "failed1.gcov"):
+        if(sys.argv[i] == f"failed{i}.gcov"):
             failed.append(sys.argv[i])
 
 
@@ -34,7 +34,7 @@ def process_files():
                 if number in passed_dict.keys():
                     passed_dict[number] += 1
                 else:
-                    passed_dict[number] = [1]
+                    passed_dict[number] = 1
         
     for item in failed:
         file = open(item,'r')
@@ -49,7 +49,7 @@ def process_files():
                 if number in failed_dict.keys():
                     failed_dict[number] += 1
                 else:
-                    failed_dict[number] = [1]
+                    failed_dict[number] = 1
 
 def sort_tuple(tup_list):
     tup_list.sort(key = lambda x: x[1], reverse=True)
@@ -57,21 +57,22 @@ def sort_tuple(tup_list):
 
 def calculate_suspicious():
     suspicious = []
+    relevant_lines = []
     total_failed = len(failed)
     #check case where a line number is both in passed and failed, only in passed, or only in failed
     for itr in passed_dict.keys():
         #in both passed and failed
         if itr in failed_dict.keys():
-            suspicious_val = (failed_dict[itr][0] / math.sqrt(total_failed * (failed_dict[itr][0] + passed_dict[itr][0])))
+            suspicious_val = (failed_dict[str(itr)] / math.sqrt(total_failed * (failed_dict[str(itr)] + passed_dict[str(itr)])))
             suspicious.append((itr, suspicious_val))
         #only in passed
         else:
-            suspicious.append((itr,0.0))
+            suspicious.append((itr,0))
 
     #only in failed
     for itr in failed_dict.keys():
         if itr not in passed_dict.keys():
-            suspicious_val = (failed_dict[itr][0] / math.sqrt(total_failed * (failed_dict[itr][0])))
+            suspicious_val = (failed_dict[str(itr)] / math.sqrt(total_failed * (failed_dict[str(itr)])))
             suspicious.append((itr, suspicious_val))
 
     suspicious = sort_tuple(suspicious)
